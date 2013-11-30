@@ -1,0 +1,14 @@
+*** Settings ***
+Library		SikuliRobotLibrary
+TestSetup	TestSetupTasks
+
+
+*** Keywords ***
+TestSetupTasks
+	SetFindObjectTimeout	10.0
+	SetWaitAfterAction	0.5
+
+
+*** Test Cases ***
+Simple Demonstration
+	Click		C:\\someFolder\\start.png
