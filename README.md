@@ -17,24 +17,4 @@ set CLASSPATH=robotframework-2.x.x.jar;SikuliRobotLibrary-1.0-SNAPSHOT-jar-with-
 and then run the test case file with the command:
 java org.robotframework.RobotFramework run test.txt
 
-Hint for Linux users! It is possible to run several Sikuli test suites simultaneously when using the xvfb virtual screen buffer and isolated xservers. As an example one can create three xserver instances with xvfb as:
-
-FIRST start separate xservers and assign a virtual screen on them:
-startx -- /usr/bin/Xvfb :1 -screen 0 1960x1080x24 &
-startx -- /usr/bin/Xvfb :2 -screen 0 1960x1080x24 &
-startx -- /usr/bin/Xvfb :3 -screen 0 1960x1080x24 &
-THEN start test cases:
-DISPLAY=:1 java org.robotframework.RobotFramework run test.txt
-DISPLAY=:2 java org.robotframework.RobotFramework run test.txt
-DISPLAY=:3 java org.robotframework.RobotFramework run test.txt
-
-Note the dependency between the parameters :1, :2 and :3 between xserver creation and test run startup. In Jenkins I have used the following script:
-
-export CLASSPATH=./testi/robotframework-2.7.7.jar:./testi/SikuliRobotLibrary-1.0-SNAPSHOT-jar-with-dependencies.jar:
-startx -- /usr/bin/Xvfb :${BUILD_NUMBER} -screen 0 1960x1080x24 &
-psid=$!
-DISPLAY=:${BUILD_NUMBER} java org.robotframework.RobotFramework -x rbot.xml run ./test.txt
-pkill -TERM -P $psid
-exit 0
-
-The ProcessId in this shell-script is used for killing the xserver and all related stuff after the test run, otherwise the xserver will be left running as a zombie process forever. I have noticed that it is not possible to start two or more xservers to the same :x display, therefore the :${BUILD_NUMBER} is used for giving always a new display number for the virtual screen buffer. I have run this setup in a laptop, but I have never tried to run on a headless Linux box. It might work in a headless setup also, but I cannot promise that.
+For more hints and tips please see the wiki-page: https://github.com/jatalahd/SikuliRobotLibrary/wiki/Hints-and-Tips
