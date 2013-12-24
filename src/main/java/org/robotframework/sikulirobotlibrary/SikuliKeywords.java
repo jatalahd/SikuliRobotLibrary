@@ -4,6 +4,7 @@ import org.robotframework.javalib.annotation.RobotKeyword;
 import org.robotframework.javalib.annotation.RobotKeywords;
 import org.robotframework.javalib.annotation.ArgumentNames;
 import org.robotframework.javalib.annotation.RobotKeywordOverload;
+
 import org.sikuli.basics.Settings;
 import org.sikuli.script.Region;
 import org.sikuli.script.Screen;
@@ -13,6 +14,10 @@ import org.sikuli.script.Match;
 import org.sikuli.script.Key;
 import org.sikuli.script.KeyModifier;
 import org.sikuli.script.Button;
+
+import java.text.SimpleDateFormat;
+import java.io.File;
+import java.util.Date;
 
 
 @RobotKeywords
@@ -87,6 +92,17 @@ public class SikuliKeywords {
     @ArgumentNames({"wait"})
     public void setWaitAfterAction(final String wait) {
         this.waitAfterAction = Double.parseDouble(wait);
+    }
+
+    @RobotKeyword("Saves a screenshot of the current screen. "
+                   + "The screenshot files are saved in a folder './scrshots' in a date-format MMddHHmmss.png.\n\n"
+                   + "Example:\n"
+                   + "| GetScreenshot |\n")
+    public void getScreenshot() throws Exception {
+        String path = "./scrshots/";
+        String fileName =  new SimpleDateFormat("MMddHHmmss'.png'").format(new Date());
+        new File(path + fileName).mkdirs();
+        scr.capture(scr.getBounds()).getFile(path, fileName);
     }
         
     @RobotKeyword("Executes a left mouse button click on the indicated object given as argument. "
