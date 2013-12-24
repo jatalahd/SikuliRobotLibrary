@@ -58,14 +58,9 @@ public class SikuliKeywords {
    
     /* Definitions for some selected special key combinations */
     private enum KeyPressCombinationCodes {
-        CTRL_C,
-        CTRL_V,
-	CTRL_A,
-	CTRL_X,
-        CTRL_ALT_DELETE,
-        ALT_F4,
-       	ALT_TAB,
-        CTRL_SHIFT_ENTER;
+        CTRL_C, CTRL_V, CTRL_A, CTRL_X,
+        CTRL_ALT_DELETE, CTRL_SHIFT_ENTER,
+        ALT_F4, ALT_TAB;
     }
    
     private Location getScreenLocation(String object) throws Exception {
@@ -82,7 +77,7 @@ public class SikuliKeywords {
                    + "| SetFindObjectTimeout | 30.0 |\n")
     @ArgumentNames({"timeout"})
     public void setFindObjectTimeout(final String timeout) {
-        this.waitTimeout = Double.valueOf(timeout);
+        this.waitTimeout = Double.parseDouble(timeout);
     }
 
     @RobotKeyword("Sets a waiting time, which is used to slow down the keyword execution. "
@@ -91,10 +86,10 @@ public class SikuliKeywords {
                    + "| SetWaitAfterAction | 5.0 |\n")
     @ArgumentNames({"wait"})
     public void setWaitAfterAction(final String wait) {
-        this.waitAfterAction = Double.valueOf(wait);
+        this.waitAfterAction = Double.parseDouble(wait);
     }
         
-    @RobotKeyword("Does a left mouse button click on the indicated object given as argument. "
+    @RobotKeyword("Executes a left mouse button click on the indicated object given as argument. "
                    + "If the argument is a path to a image file, bitmap comparison is used, "
                    + "otherwise the argument is taken as text and OCR is used for identification. "
                    + "Objects are waited to be found until the timeout set by the 'SetFindObjectTimeout' keyword expires.\n\n"
@@ -115,8 +110,8 @@ public class SikuliKeywords {
                    + "otherwise the argument is taken as text and OCR is used for identification. "
                    + "Objects are waited to be found until the timeout set by the 'SetFindObjectTimeout' keyword expires.\n\n"
                    + "Examples:\n"
-                   + "| Double Click | C:\\path_to_imagefile\\template.png |\n"
-                   + "| Double Click | Some text |\n")
+                   + "| DoubleClick | C:\\path_to_imagefile\\template.png |\n"
+                   + "| DoubleClick | Some text |\n")
     @ArgumentNames({"object"})
     public void doubleClick(final String object) throws NotFoundError {
         try {
@@ -126,13 +121,13 @@ public class SikuliKeywords {
         }
     }
         
-    @RobotKeyword("Does a right mouse button click on the indicated object given as argument. "
+    @RobotKeyword("Executes a right mouse button click on the indicated object given as argument. "
                    + "If the argument is a path to a image file, bitmap comparison is used, "
                    + "otherwise the argument is taken as text and OCR is used for identification. "
                    + "Objects are waited to be found until the timeout set by the 'SetFindObjectTimeout' keyword expires.\n\n"
                    + "Examples:\n"
-                   + "| Right Click | C:\\path_to_imagefile\\template.png |\n"
-                   + "| Right Click | Some text |\n")
+                   + "| RightClick | C:\\path_to_imagefile\\template.png |\n"
+                   + "| RightClick | Some text |\n")
     @ArgumentNames({"object"})
     public void rightClick(final String object) throws NotFoundError {
         try {
@@ -141,7 +136,64 @@ public class SikuliKeywords {
             throw new NotFoundError("Error: Could not locate object - " + object + " - on screen.");
         }
     }
-    
+
+    @RobotKeyword("Executes a left mouse button click on pixel-offset measured from the center of the object given as argument. "
+                   + "In pixel-coordinates the top-left corner of the screen is the origin (0,0). "
+                   + "If the object argument is a path to a image file, bitmap comparison is used, "
+                   + "otherwise the argument is taken as text and OCR is used for identification. "
+                   + "Objects are waited to be found until the timeout set by the 'SetFindObjectTimeout' keyword expires.\n\n"
+                   + "Examples:\n"
+                   + "| ClickWithOffset | C:\\path_to_imagefile\\template.png | 100 | -60 |\n"
+                   + "| ClickWithOffset | Some text | -20 | 20 |\n")
+    @ArgumentNames({"object","x","y"})
+    public void clickWithOffset(final String object, final String x, final String y) throws NotFoundError {
+        try {
+            Location obj = getScreenLocation( object );
+            Location offset = new Location( obj.getX() + Integer.parseInt(x), obj.getY() + Integer.parseInt(y) );
+	    scr.click( offset );
+	} catch(Exception e) {
+            throw new NotFoundError("Error: Could not locate object - " + object + " - on screen.");
+        }
+    }
+
+    @RobotKeyword("Does a left mouse button double click on pixel-offset measured from the center of the object given as argument. "
+                   + "In pixel-coordinates the top-left corner of the screen is the origin (0,0). "
+                   + "If the object argument is a path to a image file, bitmap comparison is used, "
+                   + "otherwise the argument is taken as text and OCR is used for identification. "
+                   + "Objects are waited to be found until the timeout set by the 'SetFindObjectTimeout' keyword expires.\n\n"
+                   + "Examples:\n"
+                   + "| DoubleClickWithOffset | C:\\path_to_imagefile\\template.png | 100 | -60 |\n"
+                   + "| DoubleClickWithOffset | Some text | -20 | 20 |\n")
+    @ArgumentNames({"object","x","y"})
+    public void doubleClickWithOffset(final String object, final String x, final String y) throws NotFoundError {
+        try {
+            Location obj = getScreenLocation( object );
+            Location offset = new Location( obj.getX() + Integer.parseInt(x), obj.getY() + Integer.parseInt(y) );
+            scr.doubleClick( offset );
+	} catch(Exception e) {
+            throw new NotFoundError("Error: Could not locate object - " + object + " - on screen.");
+        }
+    }
+        
+    @RobotKeyword("Executes a right mouse button click on pixel-offset measured from the center of the object given as argument. "
+                   + "In pixel-coordinates the top-left corner of the screen is the origin (0,0). "
+                   + "If the object argument is a path to a image file, bitmap comparison is used, "
+                   + "otherwise the argument is taken as text and OCR is used for identification. "
+                   + "Objects are waited to be found until the timeout set by the 'SetFindObjectTimeout' keyword expires.\n\n"
+                   + "Examples:\n"
+                   + "| RightClickWithOffset | C:\\path_to_imagefile\\template.png | 100 | -60 |\n"
+                   + "| RightClickWithOffset | Some text | -20 | 20 |\n")
+    @ArgumentNames({"object","x","y"})
+    public void rightClickWithOffset(final String object, final String x, final String y) throws NotFoundError {
+        try {
+            Location obj = getScreenLocation( object );
+            Location offset = new Location( obj.getX() + Integer.parseInt(x), obj.getY() + Integer.parseInt(y) );
+            scr.rightClick( offset );
+	} catch(Exception e) {
+            throw new NotFoundError("Error: Could not locate object - " + object + " - on screen.");
+        }
+    }
+
     @RobotKeyword("Simulates a mouse driven drag and drop action. Both the moved object and the target object need to be given as arguments. "
                    + "If the argument is a path to a image file, bitmap comparison is used, "
                    + "otherwise the argument is taken as text and OCR is used for identification. "
@@ -194,6 +246,7 @@ public class SikuliKeywords {
                    + "otherwise the argument is taken as text and OCR is used for identification. "
                    + "The narrowed region to search the object should be indicated by giving the "
                    + "pixel-coordinates of the top-left corner followed by region width and height. "
+                   + "The top-left corner of the screen is the origin with coordinate (0,0). "
                    + "Objects are waited to be found until the timeout set by the 'SetFindObjectTimeout' keyword expires.\n\n"
                    + "Examples:\n"
                    + "| ClickInRegion | C:\\path_to_imagefile\\template.png | 100 | 100 | 200 | 300 |\n"
@@ -206,7 +259,7 @@ public class SikuliKeywords {
             int c = Integer.parseInt(width);
             int d = Integer.parseInt(height);
 	    Region rg = new Region(a, b, c, d);
-            rg.click(rg.wait(object, waitTimeout));
+            rg.click( rg.wait(object, waitTimeout) );
         }
         catch(Exception e){
             throw new NotFoundError("Error: Could not locate object - " + object + " - on screen");
@@ -218,6 +271,7 @@ public class SikuliKeywords {
                    + "otherwise the argument is taken as text and OCR is used for identification. "
                    + "The narrowed region to search the object should be indicated by giving the "
                    + "pixel-coordinates of the top-left corner followed by region width and height. "
+                   + "The top-left corner of the screen is the origin with coordinate (0,0). "
                    + "Objects are waited to be found until the timeout set by the 'SetFindObjectTimeout' keyword expires.\n\n"
                    + "Examples:\n"
                    + "| DoubleClickInRegion | C:\\path_to_imagefile\\template.png | 100 | 100 | 200 | 300 |\n"
@@ -230,7 +284,7 @@ public class SikuliKeywords {
             int c = Integer.parseInt(width);
             int d = Integer.parseInt(height);
 	    Region rg = new Region(a, b, c, d);
-            rg.doubleClick(rg.wait(object, waitTimeout));
+            rg.doubleClick( rg.wait(object, waitTimeout) );
         }
         catch(Exception e){
             throw new NotFoundError("Error: Could not locate object - " + object + " - on screen");
@@ -242,6 +296,7 @@ public class SikuliKeywords {
                    + "otherwise the argument is taken as text and OCR is used for identification. "
                    + "The narrowed region to search the object should be indicated by giving the "
                    + "pixel-coordinates of the top-left corner followed by region width and height. "
+                   + "The top-left corner of the screen is the origin with coordinate (0,0). "
                    + "Objects are waited to be found until the timeout set by the 'SetFindObjectTimeout' keyword expires.\n\n"
                    + "Examples:\n"
                    + "| RightClickInRegion | C:\\path_to_imagefile\\template.png | 100 | 100 | 200 | 300 |\n"
@@ -254,44 +309,41 @@ public class SikuliKeywords {
             int c = Integer.parseInt(width);
             int d = Integer.parseInt(height);
 	    Region rg = new Region(a, b, c, d);
-            rg.rightClick(rg.wait(object, waitTimeout));
+            rg.rightClick( rg.wait(object, waitTimeout) );
         }
         catch(Exception e){
             throw new NotFoundError("Error: Could not locate object - " + object + " - on screen");
         }
     }
     
-    @RobotKeyword("Executes a left mouse button click at the pixel-coordinate given as argument.\n\n"
+    @RobotKeyword("Executes a left mouse button click at the pixel-coordinate given as argument. "
+                   + "The top-left corner of the screen is the origin with coordinate (0,0). \n\n"
                    + "Example:\n"
                    + "| ClickOnCoordinate | 100 | 100 |\n")
     @ArgumentNames({"x", "y"})
     public void clickOnCoordinate(final String x, final String y) throws Exception {
         Thread.sleep( (int)(this.waitAfterAction * 1000) );
-        int a = Integer.parseInt(x);
-        int b = Integer.parseInt(y);
-        scr.click( new Location((float)a, (float)b) );
+        scr.click( new Location(Integer.parseInt(x), Integer.parseInt(y)) );
     }
     
-    @RobotKeyword("Executes a left mouse button doubleclick at the pixel-coordinate given as argument.\n\n"
+    @RobotKeyword("Executes a left mouse button doubleclick at the pixel-coordinate given as argument. "
+                   + "The top-left corner of the screen is the origin with coordinate (0,0). \n\n"
                    + "Example:\n"
                    + "| DoubleClickOnCoordinate | 100 | 100 |\n")
     @ArgumentNames({"x", "y"})
     public void doubleClickOnCoordinate(final String x, final String y) throws Exception {
         Thread.sleep( (int)(this.waitAfterAction * 1000) );
-        int a = Integer.parseInt(x);
-        int b = Integer.parseInt(y);
-        scr.doubleClick( new Location((float)a, (float)b) );
+        scr.doubleClick( new Location(Integer.parseInt(x), Integer.parseInt(y)) );
     }
     
-    @RobotKeyword("Executes a right mouse button click at the pixel-coordinate given as argument.\n\n"
+    @RobotKeyword("Executes a right mouse button click at the pixel-coordinate given as argument. "
+                   + "The top-left corner of the screen is the origin with coordinate (0,0). \n\n"
                    + "Example:\n"
                    + "| RightClickOnCoordinate | 100 | 100 |\n")
     @ArgumentNames({"x", "y"})
     public void rightClickOnCoordinate(final String x, final String y) throws Exception {
         Thread.sleep( (int)(this.waitAfterAction * 1000) );
-        int a = Integer.parseInt(x);
-        int b = Integer.parseInt(y);
-        scr.rightClick( new Location((float)a, (float)b) );
+        scr.rightClick( new Location(Integer.parseInt(x), Integer.parseInt(y)) );
     }
     
     @RobotKeyword("Writes the text given as argument to the current carret position.\n\n"
@@ -382,7 +434,7 @@ public class SikuliKeywords {
     @ArgumentNames({"object","timeout="})
     public void waitForObjectToAppear(final String object, final String timeout) throws NotFoundError {
         try {
-            Match result = scr.wait(object, Double.valueOf(timeout));
+            Match result = scr.wait( object, Double.parseDouble(timeout) );
         } catch(Exception e) {
             throw new NotFoundError("Error: Object - " + object + " - did not appear within timeout " + timeout);
         }
@@ -407,7 +459,7 @@ public class SikuliKeywords {
                    + "| WaitForObjectToDisappear | Some Text |\n")
     @ArgumentNames({"object","timeout="})
     public void waitForObjectToDisappear(final String object, final String timeout) throws NotFoundError {
-        Boolean result = scr.waitVanish(object, Double.valueOf(timeout));
+        Boolean result = scr.waitVanish( object, Double.parseDouble(timeout) );
         if (!result) {
              throw new NotFoundError("Error: Object - " + object + " - did not disappear within timeout " + timeout);
         }
@@ -461,7 +513,7 @@ public class SikuliKeywords {
     @ArgumentNames({"img","similarity="})
     public void locateImage(final String img, final String similarity) throws NotFoundError {
         Match result = scr.exists(img, waitTimeout);
-        if ( result == null || result.getScore() < Float.valueOf(similarity) ) {
+        if ( result == null || result.getScore() < Float.parseFloat(similarity) ) {
              throw new NotFoundError("Error: Could not locate image - " + img + " - on screen");
         }
     }
