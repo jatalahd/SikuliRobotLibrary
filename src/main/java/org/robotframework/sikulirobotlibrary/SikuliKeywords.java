@@ -103,6 +103,7 @@ public class SikuliKeywords {
         String fileName =  new SimpleDateFormat("MMddHHmmss'.png'").format(new Date());
         new File(path + fileName).mkdirs();
         scr.capture(scr.getBounds()).getFile(path, fileName);
+        System.out.println("*HTML* <img src='" + path + fileName + "'></img>");
     }
         
     @RobotKeyword("Executes a left mouse button click on the indicated object given as argument. "
