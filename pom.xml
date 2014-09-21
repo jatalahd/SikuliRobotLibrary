@@ -13,6 +13,23 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+  
+  <repositories>
+    <repository>  <!-- OSSRH: com.sikulix -->
+      <id>com-sikulix</id>
+      <name>com-sikulix</name>
+      <url>https://oss.sonatype.org/content/groups/public</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
 
   <dependencies>
     <dependency>
@@ -20,12 +37,12 @@
       <artifactId>javalib-core</artifactId>
       <version>1.2</version>
     </dependency>
-
+    
     <dependency>
-      <groupId>org.sikuli</groupId>
-      <artifactId>sikuli-java</artifactId>
-      <version>1.0.1</version>
-    </dependency> 
+      <groupId>com.sikulix</groupId>
+      <artifactId>sikulixapi</artifactId>
+      <version>1.1.0-SNAPSHOT</version>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>
